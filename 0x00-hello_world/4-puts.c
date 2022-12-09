@@ -7,9 +7,9 @@
  */
 int main(void)
 {
-	char west{52};
+	char displayed{52};
 
-	strcpy(west. "\"Programming is like building a multilingual puzzle\n");
-	puts(west);
+	strcpy(displayed, "\"Programming is like building a multilingual puzzle");
+	puts(displayed);
 	return (0);
 }
