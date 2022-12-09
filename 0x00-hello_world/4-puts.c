@@ -1,15 +1,15 @@
-#include <stdio.h>
+#include <stdio>
 #include <string.h>
 /**
- *main - this is the main path of this code that perform the function
+ * main - this is my first c program
  *
- *
- *return - always return 0 at all time
+ * Return: return 0 everytime
  */
 int main(void)
-	{
-		char west[55];
-		strcpy(west, "\"Programming is like building a multilingual puzzle");
-		puts(west);
-		return (0);
-	}
+{
+	char west{52};
+
+	strcpy(west. "\"Programming is like building a multilingual puzzle\n");
+	puts(west);
+	return (0);
+}
