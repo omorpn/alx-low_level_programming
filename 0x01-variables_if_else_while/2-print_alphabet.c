@@ -1,35 +1,21 @@
-
 #include <stdio.h>
-
 /**
- * main - Prints all possible combinations of two two-digit numbers,
- *        ranging from 0-99, separated by a comma followed by a space.
+ * main - entry point
  *
- * Return: Always 0.
+ * description - function that prints the value of a variabl
+ *
+ * Return: Always 0 (Success)
  */
 int main(void)
 {
-	int num1, num2;
+	int x;
+	char ch;
 
-	for (num1 = 0; num1 <= 98; num1++)
+	for (x = 97; x < 123; x++)
 	{
-		for (num2 = num1 + 1; num2 <= 99; num2++)
-		{
-			putchar((num1 / 10) + '0');
-			putchar((num1 % 10) + '0');
-			putchar(' ');
-			putchar((num2 / 10) + '0');
-			putchar((num2 % 10) + '0');
-
-			if (num1 == 98 && num2 == 99)
-				continue;
-
-			putchar(',');
-			putchar(' ');
-		}
+		ch = x;
+		putchar(ch);
 	}
-
 	putchar('\n');
-
 	return (0);
 }
