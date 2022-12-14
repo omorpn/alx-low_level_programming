@@ -1,1 +1,1 @@
-This is wgere i learnt hiw to write functions and nested loop
+This is where i learnt how to write functions and nested loop
