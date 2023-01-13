@@ -1,128 +1,157 @@
-#include "main.h"
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /**
- * main - multiplies two positive numbers
- * @argc: argument count
- * @argv: argument vectors
- * Return: 0
+ * isdigits - checks if a string contains only digits
+ * @string: a string
+ * Return: 1 if string contains only nums, else 0
  */
-int main(int argc, char *argv[])
+int isdigits(const char *string)
 {
-	char *f = argv[1];
-	char *s = argv[2];
+	unsigned int i;
 
-	if (argc != 3 || !onlyNumbers(f) || !onlyNumbers(s))
-	{
-		printf("Error\n");
-		exit(98);
-	}
-	if (*f == 48 || *s == 48)
-		printf("0\n");
-	else
-		multiply(s, f);
-	return (0);
-}
-
-/**
- * multiply - multiplies two numbers and displays it
- * @f: first "number"
- * @s: second "number"
- */
-void multiply(char *f, char *s)
-{
-	int i, len1, len2, total, fdigit, sdigit, res = 0, tmp;
-	int *ptr;
-
-	len1 = _strlen(f);
-	len2 = _strlen(s);
-	tmp = len2;
-	total = len1 + len2;
-	ptr = _calloc(sizeof(int), (len1 + len2));
-	for (len1--; len1 >= 0; len1--)
-	{
-		fdigit = f[len1] - '0';
-		res = 0;
-		len2 = tmp;
-		for (len2--; len2 >= 0; len2--)
-		{
-			sdigit = s[len2] - '0';
-			res += ptr[len2 + len1 + 1] + (fdigit * sdigit);
-			ptr[len1 + len2 + 1] = res % 10;
-			res /= 10;
-		}
-		if (res)
-			ptr[len1 + len2 + 1] = res % 10;
-	}
-	while (*ptr == 0)
-	{
-		ptr++;
-		total--;
-	}
-	for (i = 0; i < total; i++)
-		printf("%i", ptr[i]);
-	printf("\n");
-}
-/**
- * onlyNumbers - determines if string has only numbers
- * @c: input string
- * Return: 0 if false, 1 if true
- */
-int onlyNumbers(char *c)
-{
-	while (*c)
-	{
-		if (*c < '0' || *c > '9')
+	for (i = 0; string[i]; i++)
+		if (string[i] > '9' || string[i] < '0')
 			return (0);
-		c++;
-	}
 	return (1);
 }
 
 /**
- * _strlen - returns the length of a string
- * @s: string s
- * Return: length of string
+ * Array - creates a char array of a specified size and
+ * fills it with a constant byte
+ * @size: the size of array (in bytes)
+ * @b: a constant byte
+ * Return: created array
  */
-int _strlen(char *s)
+char *Array(unsigned int size, char b)
 {
-	char *p = s;
+	unsigned int i;
+	char *buffer;
 
-	while (*s)
-		s++;
-	return (s - p);
+	buffer = (char *)malloc(size);
+	if (buffer == NULL)
+		return (NULL);
+	for (i = 0; i < size; i++)
+		buffer[i] = b;
+	return (buffer);
 }
 
 /**
- * _memset - fills memory with a constant byte
- * @s: memory area
- * @b: constant byte
- * @n: bytes of the memory area
- * Return: pointer to the memory area s
+ * toint - converts a char into it's appropriate int value
+ * @n: the char to be converted
+ * Return: an integer
  */
-char *_memset(char *s, char b, unsigned int n)
+int toint(char n)
 {
-	char *ptr = s;
-
-	while (n--)
-		*s++ = b;
-	return (ptr);
+	return (((int)n) - 48);
 }
 
 /**
- * _calloc - allocates memory for an array, using malloc
- * @nmemb: number of elements of pointer
- * @size: size of each member
- * Return: pointer of allocated memory
+ * mul - multiply integers in strings
+ * @num1: first integer
+ * @num2: second integer
+ * @result: a buffer where the result would be stored
+ * Return: nothing
  */
-void *_calloc(unsigned int nmemb, unsigned int size)
+void mul(char *num1, char *num2, char *result)
 {
-	void *ptr;
+	unsigned int len1, len2, i_n1, i_n2, carry, n1, n2, sum;
+	int i, j;
 
-	if (!nmemb || !size)
-		return (NULL);
-	ptr = malloc(size * nmemb);
-	if (!ptr)
-		return (NULL);
-	_memset(ptr, 0, size * nmemb);
-	return (ptr);
+	len1 = strlen(num1);
+	len2 = strlen(num2);
+	i_n1 = i_n2 = 0;
+
+	for (i = len1 - 1; i >= 0; i--)
+	{
+		carry = 0;
+		n1 = toint(num1[i]);
+		i_n2 = 0;
+
+		for (j = len2 - 1; j >= 0; j--)
+		{
+			n2 = toint(num2[j]);
+			sum = n1 * n2 + toint(result[i_n1 + i_n2]) + carry;
+			carry = sum / 10;
+			result[i_n1 + i_n2] = (char)(sum % 10) + 48;
+			i_n2++;
+		}
+
+		if (carry > 0)
+			result[i_n1 + i_n2] = (char)(toint(result[i_n1 + i_n2]) + carry) + 48;
+		i_n1++;
+	}
+}
+
+/**
+ * revrstr - reverse a string inplace
+ * @s: the string
+ * Return: nothing
+ */
+void revrstr(char *s)
+{
+	unsigned int ind, rind, l;
+	char c;
+
+	l = strlen(s);
+	ind = 0;
+	rind = l - 1;
+	while (ind < rind)
+	{
+		c = s[ind];
+		s[ind] = s[rind];
+		s[rind] = c;
+		ind++;
+		rind--;
+	}
+}
+
+/**
+ * main - entry point
+ * @argc: number arguments passed
+ * @argv: list of arguments passed
+ *
+ * Return: Always 0
+ */
+int main(int argc, char const *argv[])
+{
+	unsigned int len1, len2;
+	int l;
+	char *num1, *num2, *result;
+
+	if (argc != 3 || !isdigits(argv[1]) || !isdigits(argv[2]))
+	{
+		puts("Error");
+		exit(98);
+	}
+	num1 = strdup(argv[1]);
+	if (num1 == NULL)
+		exit(98);
+	num2 = strdup(argv[2]);
+	if (num2 == NULL)
+	{
+		free(num1);
+		exit(98);
+	}
+	len1 = strlen(num1);
+	len2 = strlen(num2);
+	result = Array(len1 + len2, '0');
+	if (result == NULL)
+		exit(98);
+	mul(num1, num2, result);
+	l = strlen(result) - 1;
+	for (; l >= 0 && result[l] == '0'; l--)
+		result[l] = '\0';
+	if (l == -1)
+		puts("0");
+	else
+	{
+		revrstr(result);
+		puts(result);
+	}
+	free(result);
+	free(num1);
+	free(num2);
+	return (0);
 }
